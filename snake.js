@@ -38,13 +38,13 @@
 		// https://de.wikipedia.org/wiki/Tetris#Spielprinzip
 		// https://de.wikipedia.org/wiki/Polyomino
 		this.polyominos = new Array(7);
-		this.polyominos[0] = new Array[new Array(0,0,0,0), new Array(1,1,1,1)];
-		this.polyominos[1] = new Array[new Array(0,1,0,0), new Array(0,1,1,1)];
-		this.polyominos[2] = new Array[new Array(0,0,0,1), new Array(0,1,1,1)];
-		this.polyominos[3] = new Array[new Array(1,1,0,0), new Array(1,1,0,0)];
-		this.polyominos[4] = new Array[new Array(0,0,1,1), new Array(0,1,1,0)];
-		this.polyominos[5] = new Array[new Array(0,0,1,0), new Array(0,1,1,1)];
-		this.polyominos[6] = new Array[new Array(0,1,1,0), new Array(0,0,1,1)];
+		this.polyominos[0] = new Array[new Array(0,0,0,0), new Array(1,1,1,1), "#41EDE9"];
+		this.polyominos[1] = new Array[new Array(0,1,0,0), new Array(0,1,1,1), "#0107FA"];
+		this.polyominos[2] = new Array[new Array(0,0,0,1), new Array(0,1,1,1), "#F5AA0E"];
+		this.polyominos[3] = new Array[new Array(1,1,0,0), new Array(1,1,0,0), "#EDFA03"];
+		this.polyominos[4] = new Array[new Array(0,0,1,1), new Array(0,1,1,0), "#49FA30"];
+		this.polyominos[5] = new Array[new Array(0,0,1,0), new Array(0,1,1,1), "#E901FC"];
+		this.polyominos[6] = new Array[new Array(0,1,1,0), new Array(0,0,1,1), "#F20006"];
 	}
 
 	function Snake(elements) {
@@ -54,9 +54,9 @@
 		this.colorDeath = "#FF0000";
 		this.colorHead  = "#EE6600";
 		this.interval = null;
-		this.speed = 150;
-		this.horizontalDirection = -1;
-		this.verticalDirection   =  0;
+		this.speed = 300;
+		this.horizontalDirection = 0;
+		this.verticalDirection   =  1;
 		this.isKeyPressed = false;
 		
 		this.length = function() {
@@ -194,28 +194,7 @@
 			th.title = "SNAKE JavaScript stammt von derletztekick.com - diese Seite besuchen...";
 			try { th.style.cursor = "pointer"; } catch(e){ th.style.cursor = "hand"; }
 			th.onclick = function() { window.open("http://derletztekick.com", "_blank"); };
-			
-			/*
-			// WIDGET only
-			th.style.borderRight = "none";
-			th.style.paddingLeft = "15px";
-			th.colSpan = this.cellCount-1;
-			tr.appendChild(th);
-			th = document.createElement("th");
-			th.style.borderLeft = "none";
-			var closeButton = new Image(10,10);
-			closeButton.className = "x";
-			closeButton.alt = "x";
-			closeButton.src = "./x.png";
-			closeButton.title = "Schließen";
-			closeButton.style.display = "block";
-
-			closeButton.onclick = function() { window.close(); };
-			try { closeButton.style.cursor = "pointer"; } catch(e){ closeButton.style.cursor = "hand"; }
-			th.appendChild( closeButton );
-			// WIDGET only
-			*/
-			
+				
 			tr.appendChild(th);
 			thead.appendChild(tr);
 			
