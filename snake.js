@@ -154,8 +154,9 @@
 		}
 	}
 
-	function Terrarium(cellCount) {
-		this.cellCount = cellCount;
+	function Terrarium(y, x) {
+		this.cellCountX = x;
+		this.cellCountY = y;
 		this.crumbCounter = 0;
 		this.grid = [];
 		this.snake = null;
@@ -174,7 +175,7 @@
 			
 			var tr = document.createElement("tr");
 			th = document.createElement("th");
-			th.colSpan = this.cellCount;
+			th.colSpan = this.cellCountY;
 			th.appendChild( document.createTextNode("SNAKE JavaScript") );
 			th.title = "SNAKE JavaScript stammt von derletztekick.com - diese Seite besuchen...";
 			try { th.style.cursor = "pointer"; } catch(e){ th.style.cursor = "hand"; }
@@ -206,7 +207,7 @@
 			
 			tr = document.createElement("tr");
 			var td = document.createElement("td");
-			td.colSpan = this.cellCount-newGameFontWidth;
+			td.colSpan = this.cellCountY-newGameFontWidth;
 			td.appendChild( document.createTextNode("Counter: " + this.crumbCounter) );
 			td.className = "left";
 			tr.appendChild(td);
@@ -231,10 +232,10 @@
 			tr.appendChild(td);
 			tfoot.appendChild(tr);
 			
-			for (var i=0; i<this.cellCount; i++) {
+			for (var i=0; i<this.cellCountX; i++) {
 				var tr = document.createElement("tr");
 				var row = [];
-				for (var j=0; j<this.cellCount; j++) {
+				for (var j=0; j<this.cellCountY; j++) {
 					var td = document.createElement("td");
 					td.x = i;
 					td.y = j;
@@ -261,8 +262,8 @@
 			x = el.x+x;
 			y = el.y+y;
 				
-			x = x<0?this.cellCount-1:x>=this.cellCount?0:x;
-			y = y<0?this.cellCount-1:y>=this.cellCount?0:y;	
+			x = x<0?this.cellCountX-1:x>=this.cellCountX?0:x;
+			y = y<0?this.cellCountY-1:y>=this.cellCountY?0:y;	
 			
 			var cell = this.grid[x][y];
 			var isFoot = this.crumb != null && this.crumb.equalPosition( cell );
@@ -274,8 +275,8 @@
 		}
 		
 		this.setCrumb = function() {
-			var x = Math.rand(0, this.cellCount-1);
-			var y = Math.rand(0, this.cellCount-1);
+			var x = Math.rand(0, this.cellCountX-1);
+			var y = Math.rand(0, this.cellCountY-1);
 			
 			if (this.snake.contains( this.grid[x][y] ) )
 				this.setCrumb();
@@ -288,8 +289,8 @@
 		
 		this.insertSnake = function(speedLevel) {
 			speedLevel = speedLevel || 1;
-			var sX = Math.ceil(this.cellCount/2)-1,
-			    sY = Math.ceil(this.cellCount/2);
+			var sX = Math.ceil(this.cellCountX/2)-1,
+			    sY = Math.ceil(this.cellCountY/2);
 			var cells = [ 
 				this.grid[sX][sY-2], 
 				this.grid[sX][sY-1],
@@ -336,4 +337,4 @@
 	}
 	
 	if (document.getElementById && document.createElement)
-		addContentLoadListener( function() { new Terrarium(14); } );
+		addContentLoadListener( function() { new Terrarium(11, 20); } );
