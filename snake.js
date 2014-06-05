@@ -33,21 +33,8 @@
 			return ev.which;
 	}
 
-
-	function CreatePolyominos() {
-		// https://de.wikipedia.org/wiki/Tetris#Spielprinzip
-		// https://de.wikipedia.org/wiki/Polyomino
-		this.polyominos = new Array(7);
-		this.polyominos[0] = new Array[new Array(0,0,0,0), new Array(1,1,1,1), "#41EDE9"];
-		this.polyominos[1] = new Array[new Array(0,1,0,0), new Array(0,1,1,1), "#0107FA"];
-		this.polyominos[2] = new Array[new Array(0,0,0,1), new Array(0,1,1,1), "#F5AA0E"];
-		this.polyominos[3] = new Array[new Array(1,1,0,0), new Array(1,1,0,0), "#EDFA03"];
-		this.polyominos[4] = new Array[new Array(0,0,1,1), new Array(0,1,1,0), "#49FA30"];
-		this.polyominos[5] = new Array[new Array(0,0,1,0), new Array(0,1,1,1), "#E901FC"];
-		this.polyominos[6] = new Array[new Array(0,1,1,0), new Array(0,0,1,1), "#F20006"];
-	}
-
 	function Snake(elements) {
+		
 		this.isAlive = true;
 		this.elements = elements;
 		this.colorAlive = "#FF9933";
@@ -91,6 +78,48 @@
 				this.elements[i].style.backgroundColor = this.elements[i].defaultColor;
 		}
 
+		this.initPolyominos = function() {
+			// https://de.wikipedia.org/wiki/Tetris#Spielprinzip
+			// https://de.wikipedia.org/wiki/Polyomino
+			this.polyominos = new Array(7);
+
+			this.polyominos[0] = {
+	    	x: new Array(0,0,0,0),
+	    	y: new Array(1,1,1,1),
+	    	color: "#41EDE9"
+			}
+			this.polyominos[1] = {
+	    	x: new Array(0,1,0,0),
+	    	y: new Array(0,1,1,1),
+	    	color: "#0107FA"
+			}
+			this.polyominos[2] = {
+	    	x: new Array(0,0,0,1),
+	    	y: new Array(0,1,1,1),
+	    	color: "#F5AA0E"
+			}
+			this.polyominos[3] = {
+	    	x: new Array(1,1,0,0),
+	    	y: new Array(1,1,0,0),
+	    	color: "#EDFA03"
+			}
+			this.polyominos[4] = {
+	    	x: new Array(0,0,1,1),
+	    	y: new Array(0,1,1,0),
+	    	color: "#49FA30"
+			}
+			this.polyominos[5] = {
+	    	x: new Array(0,0,1,0),
+	    	y: new Array(0,1,1,1),
+	    	color: "#E901FC"
+			}
+			this.polyominos[6] = {
+	    	x: new Array(0,1,1,0),
+	    	y: new Array(0,0,1,1),
+	    	color: "#F20006"
+			}
+		}
+
 
 		this.moveTo = function(newPos, isFoot){
 
@@ -106,6 +135,10 @@
 			
 			var newElements = [];
 			newElements.push(newPos);
+
+
+
+
 			for (var i=0; i<this.length(); i++) {
 				this.elements[i].style.backgroundColor = this.colorAlive;
 				if (i<this.length()-1)
@@ -153,7 +186,7 @@
 		}
 		
 		this.initSnake();
-
+		this.initPolyominos();
 	}
 	
 	function Crumb(element) {
