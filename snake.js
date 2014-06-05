@@ -1,26 +1,3 @@
-     /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     +               SNAKE JavaScript v1.02 by Michael Loesler              +
-     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     + Copyright (C) by Michael Loesler, http//derletztekick.com            +
-     +                                                                      +
-     +                                                                      +
-     + This program is free software; you can redistribute it and/or modify +
-     + it under the terms of the GNU General Public License as published by +
-     + the Free Software Foundation; either version 2 of the License, or    +
-     + (at your option) any later version.                                  +
-     +                                                                      +
-     + This program is distributed in the hope that it will be useful,      +
-     + but WITHOUT ANY WARRANTY; without even the implied warranty of       +
-     + MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        +
-     + GNU General Public License for more details.                         +
-     +                                                                      +
-     + You should have received a copy of the GNU General Public License    +
-     + along with this program; if not, write to the                        +
-     + Free Software Foundation, Inc.,                                      +
-     + 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.            +
-     +                                                                      +
-      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-	
 	Math.rand = function(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
@@ -84,95 +61,63 @@
 			this.polyominos = new Array(7);
 			this.polyominos[0] = {
 				matrix: [
-					[0,0,0,0],
-					[1,1,1,1], 
-					[0,0,0,0], 
-					[0,0,0,0]
+					[1,1,1,1]
 				],
 	    	color: "#41EDE9"
 			}
 			this.polyominos[1] = {
 				matrix: [
-					[0,1,0,0],
-					[0,1,1,1],
-					[0,0,0,0],
-					[0,0,0,0]
+					[1,0,0],
+					[1,1,1]
 				],
 			}
 			this.polyominos[2] = {
 				matrix: [
-					[0,0,0,1],
-					[0,1,1,1],
-					[0,0,0,0],
-					[0,0,0,0]
+					[0,0,1],
+					[1,1,1]
 				],
 	    	color: "#F5AA0E"
 			}
 			this.polyominos[3] = {
 				matrix: [
-					[0,1,1,0],
-					[0,1,1,0],
-					[0,0,0,0],
-					[0,0,0,0]
+					[1,1],
+					[1,1]
 				],
 	    	color: "#EDFA03"
 			}
 			this.polyominos[4] = {
 				matrix: [ 
-					[0,0,1,1], 
-					[0,1,1,0], 
-					[0,0,0,0], 
-					[0,0,0,0]
+					[1,1,0], 
+					[0,1,1]
 				],
 	    	color: "#49FA30"
 			}
 			this.polyominos[5] = {
 				matrix: [
-					[0,0,1,0], 
-					[0,1,1,1], 
-					[0,0,0,0], 
-					[0,0,0,0]
+					[0,1,0], 
+					[1,1,1]
 				],
 	    	color: "#E901FC"
 			}
 			this.polyominos[6] = {
 				matrix: [
-					[0,1,1,0], 
-					[0,0,1,1], 
-					[0,0,0,0], 
-					[0,0,0,0]
+					[0,1,1], 
+					[1,1,0]
 				],
 	    	color: "#F20006"
 			}
 		}
 
 		this.rotate = function(){
-		// C# Code from: 
-		// https://stackoverflow.com/questions/4650762/programming-contest-question-counting-polyominos
-		//
-		// int w = matrix.length;
-    // int h = matrix[0].length;
-    // boolean[][] ret = new boolean[h][w];
-    // for (int i = 0; i < h; ++i)
-    // {
-    //     for (int j = 0; j < w; ++j)
-    //     {
-    //         ret[i][j] = matrix[w - j - 1][i];
-    //     }
-    // }
-    //
-			tmpStone = {
-				matrix: [
-					[0,0,0,0], 
-					[0,0,0,0], 
-					[0,0,0,0], 
-					[0,0,0,0]
-				],
-	    	color: this.currentStone.color
-			}
-			for (var i=0; i < i < 4; i++) {
-				for (var j=0; j < j < 4; j++) {
-					tmpStone.matrix[i][j] = this.currentStone.matrix[3 - j];
+			// Converted C# Code from: 
+			// https://stackoverflow.com/questions/4650762/programming-contest-question-counting-polyominos
+			w = this.currentStone.matrix.length
+			h = this.currentStone.matrix[0].length
+			newMatrix = [];			
+			for (var i=0; i < h; i++) {
+				newMatrix[i] = [];
+				for (var j=0; j < w; j++) {
+					newMatrix[i][j] = this.currentStone.matrix[w - j - 1][i];
 				}
 			}
 		}
