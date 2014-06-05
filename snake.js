@@ -33,6 +33,20 @@
 			return ev.which;
 	}
 
+
+	function CreatePolyominos() {
+		// https://de.wikipedia.org/wiki/Tetris#Spielprinzip
+		// https://de.wikipedia.org/wiki/Polyomino
+		this.polyominos = new Array(7);
+		this.polyominos[0] = new Array[new Array(0,0,0,0), new Array(1,1,1,1)];
+		this.polyominos[1] = new Array[new Array(0,1,0,0), new Array(0,1,1,1)];
+		this.polyominos[2] = new Array[new Array(0,0,0,1), new Array(0,1,1,1)];
+		this.polyominos[3] = new Array[new Array(1,1,0,0), new Array(1,1,0,0)];
+		this.polyominos[4] = new Array[new Array(0,0,1,1), new Array(0,1,1,0)];
+		this.polyominos[5] = new Array[new Array(0,0,1,0), new Array(0,1,1,1)];
+		this.polyominos[6] = new Array[new Array(0,1,1,0), new Array(0,0,1,1)];
+	}
+
 	function Snake(elements) {
 		this.isAlive = true;
 		this.elements = elements;
