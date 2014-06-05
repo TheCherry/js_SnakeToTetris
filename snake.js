@@ -82,42 +82,104 @@
 			// https://de.wikipedia.org/wiki/Tetris#Spielprinzip
 			// https://de.wikipedia.org/wiki/Polyomino
 			this.polyominos = new Array(7);
-
 			this.polyominos[0] = {
-	    	x: new Array(0,0,0,0),
-	    	y: new Array(1,1,1,1),
+				matrix: [
+					[0,0,0,0],
+					[1,1,1,1], 
+					[0,0,0,0], 
+					[0,0,0,0]
+				],
 	    	color: "#41EDE9"
 			}
 			this.polyominos[1] = {
-	    	x: new Array(0,1,0,0),
-	    	y: new Array(0,1,1,1),
-	    	color: "#0107FA"
+				matrix: [
+					[0,1,0,0],
+					[0,1,1,1],
+					[0,0,0,0],
+					[0,0,0,0]
+				],
 			}
 			this.polyominos[2] = {
-	    	x: new Array(0,0,0,1),
-	    	y: new Array(0,1,1,1),
+				matrix: [
+					[0,0,0,1],
+					[0,1,1,1],
+					[0,0,0,0],
+					[0,0,0,0]
+				],
 	    	color: "#F5AA0E"
 			}
 			this.polyominos[3] = {
-	    	x: new Array(1,1,0,0),
-	    	y: new Array(1,1,0,0),
+				matrix: [
+					[0,1,1,0],
+					[0,1,1,0],
+					[0,0,0,0],
+					[0,0,0,0]
+				],
 	    	color: "#EDFA03"
 			}
 			this.polyominos[4] = {
-	    	x: new Array(0,0,1,1),
-	    	y: new Array(0,1,1,0),
+				matrix: [ 
+					[0,0,1,1], 
+					[0,1,1,0], 
+					[0,0,0,0], 
+					[0,0,0,0]
+				],
 	    	color: "#49FA30"
 			}
 			this.polyominos[5] = {
-	    	x: new Array(0,0,1,0),
-	    	y: new Array(0,1,1,1),
+				matrix: [
+					[0,0,1,0], 
+					[0,1,1,1], 
+					[0,0,0,0], 
+					[0,0,0,0]
+				],
 	    	color: "#E901FC"
 			}
 			this.polyominos[6] = {
-	    	x: new Array(0,1,1,0),
-	    	y: new Array(0,0,1,1),
+				matrix: [
+					[0,1,1,0], 
+					[0,0,1,1], 
+					[0,0,0,0], 
+					[0,0,0,0]
+				],
 	    	color: "#F20006"
 			}
+		}
+
+		this.rotate = function(){
+		// C# Code from: 
+		// https://stackoverflow.com/questions/4650762/programming-contest-question-counting-polyominos
+		//
+		// int w = matrix.length;
+    // int h = matrix[0].length;
+    // boolean[][] ret = new boolean[h][w];
+    // for (int i = 0; i < h; ++i)
+    // {
+    //     for (int j = 0; j < w; ++j)
+    //     {
+    //         ret[i][j] = matrix[w - j - 1][i];
+    //     }
+    // }
+    //
+			tmpStone = {
+				matrix: [
+					[0,0,0,0], 
+					[0,0,0,0], 
+					[0,0,0,0], 
+					[0,0,0,0]
+				],
+	    	color: this.currentStone.color
+			}
+			for (var i=0; i < i < 4; i++) {
+				for (var j=0; j < j < 4; j++) {
+					tmpStone.matrix[i][j] = this.currentStone.matrix[3 - j];
+				}
+			}
+		}
+
+		this.newStone = function(){
+			this.currentStone = this.polyominos[Math.rand(0, 6)];
+
 		}
 
 
@@ -135,9 +197,6 @@
 			
 			var newElements = [];
 			newElements.push(newPos);
-
-
-
 
 			for (var i=0; i<this.length(); i++) {
 				this.elements[i].style.backgroundColor = this.colorAlive;
