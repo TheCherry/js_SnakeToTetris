@@ -55,6 +55,95 @@
 				this.elements[i].style.backgroundColor = this.elements[i].defaultColor;
 		}
 
+		
+
+
+		this.moveTo = function(newPos, isFoot){
+
+			isFoot = isFoot || false;
+
+			var canMove = !this.contains(newPos)?true:this.elements[this.length()-1].x==newPos.x&&this.elements[this.length()-1].y==newPos.y?true:false;
+			
+			canMove = canMove || this.horizontalDirection != 0 && this.verticalDirection != 0;
+			if (!this.isAlive || !canMove) {
+				this.dispatch();
+				return;
+			}			
+			
+			var newElements = [];
+			newElements.push(newPos);
+
+			for (var i=0; i<this.length(); i++) {
+				this.elements[i].style.backgroundColor = this.colorAlive;
+				if (i<this.length()-1)
+					newElements.push( this.elements[i] );
+				else if (i==this.length()-1 && isFoot)
+					newElements.push( this.elements[this.length()-1] );
+				else
+					this.elements[this.length()-1].style.backgroundColor = this.elements[this.length()-1].defaultColor;
+			}
+			newPos.style.backgroundColor = this.colorHead;
+			this.elements = newElements;
+			this.isKeyPressed = false;
+		}
+		var self = this;
+		document.onkeydown = function(e){
+			if (self.isKeyPressed)
+				return;
+			var kc = window.getKeyCode(e);
+			// links
+			if ((kc == 37 || kc == 65) && self.horizontalDirection == 0) {
+				self.horizontalDirection = -1;
+				self.verticalDirection = 0;
+			}
+			// hoch
+			else if ((kc == 38 || kc == 87)) {
+				this.rotate();
+			}
+			//rechts
+			else if ((kc == 39 || kc == 68) && self.horizontalDirection == 0) {
+				self.horizontalDirection = 1;
+				self.verticalDirection = 0;
+			}
+			//runter
+			else if ((kc == 40 || kc == 83) && self.verticalDirection == 0) {
+				self.verticalDirection = 1;
+				self.horizontalDirection = 0;
+			}
+			self.isKeyPressed = true;
+		};
+
+		
+		this.getElement = function(i) {
+			return this.elements[i];
+		}
+		
+		this.initSnake();
+	}
+	
+	function Crumb(element) {
+		this.element = element;
+		this.isEnable = false;
+		this.color = "#006600";
+		this.enabled = function(enable) {
+			this.element.style.backgroundColor = (this.isEnable = enable)?this.color:this.element.defaultColor;
+		}
+		this.equalPosition = function( el ) {
+			return (this.element.x == el.x && this.element.y == el.y)
+		}
+	}
+
+	function Terrarium(y, x) {
+		this.cellCountX = x;
+		this.cellCountY = y;
+		this.crumbCounter = 0;
+		this.grid = [];
+		this.snake = null;
+		this.crumb = null;
+		this.gridBackgroundColorColor = "transparent";
+
+
+
 		this.initPolyominos = function() {
 			// https://de.wikipedia.org/wiki/Tetris#Spielprinzip
 			// https://de.wikipedia.org/wiki/Polyomino
@@ -120,99 +209,13 @@
 					newMatrix[i][j] = this.currentStone.matrix[w - j - 1][i];
 				}
 			}
+			this.currentStone.matrix = newMatrix;
 		}
 
 		this.newStone = function(){
 			this.currentStone = this.polyominos[Math.rand(0, 6)];
-
 		}
 
-
-		this.moveTo = function(newPos, isFoot){
-
-			isFoot = isFoot || false;
-
-			var canMove = !this.contains(newPos)?true:this.elements[this.length()-1].x==newPos.x&&this.elements[this.length()-1].y==newPos.y?true:false;
-			
-			canMove = canMove || this.horizontalDirection != 0 && this.verticalDirection != 0;
-			if (!this.isAlive || !canMove) {
-				this.dispatch();
-				return;
-			}			
-			
-			var newElements = [];
-			newElements.push(newPos);
-
-			for (var i=0; i<this.length(); i++) {
-				this.elements[i].style.backgroundColor = this.colorAlive;
-				if (i<this.length()-1)
-					newElements.push( this.elements[i] );
-				else if (i==this.length()-1 && isFoot)
-					newElements.push( this.elements[this.length()-1] );
-				else
-					this.elements[this.length()-1].style.backgroundColor = this.elements[this.length()-1].defaultColor;
-			}
-			newPos.style.backgroundColor = this.colorHead;
-			this.elements = newElements;
-			this.isKeyPressed = false;
-		}
-		var self = this;
-		document.onkeydown = function(e){
-			if (self.isKeyPressed)
-				return;
-			var kc = window.getKeyCode(e);
-			// links
-			if ((kc == 37 || kc == 65) && self.horizontalDirection == 0) {
-				self.horizontalDirection = -1;
-				self.verticalDirection = 0;
-			}
-			// hoch
-			else if ((kc == 38 || kc == 87) && self.verticalDirection == 0) {
-				self.verticalDirection = -1;
-				self.horizontalDirection = 0;
-			}
-			//rechts
-			else if ((kc == 39 || kc == 68) && self.horizontalDirection == 0) {
-				self.horizontalDirection = 1;
-				self.verticalDirection = 0;
-			}
-			//runter
-			else if ((kc == 40 || kc == 83) && self.verticalDirection == 0) {
-				self.verticalDirection = 1;
-				self.horizontalDirection = 0;
-			}
-			self.isKeyPressed = true;
-		};
-
-		
-		this.getElement = function(i) {
-			return this.elements[i];
-		}
-		
-		this.initSnake();
-		this.initPolyominos();
-	}
-	
-	function Crumb(element) {
-		this.element = element;
-		this.isEnable = false;
-		this.color = "#006600";
-		this.enabled = function(enable) {
-			this.element.style.backgroundColor = (this.isEnable = enable)?this.color:this.element.defaultColor;
-		}
-		this.equalPosition = function( el ) {
-			return (this.element.x == el.x && this.element.y == el.y)
-		}
-	}
-
-	function Terrarium(y, x) {
-		this.cellCountX = x;
-		this.cellCountY = y;
-		this.crumbCounter = 0;
-		this.grid = [];
-		this.snake = null;
-		this.crumb = null;
-		this.gridBackgroundColorColor = "transparent";
 		
 		this.initTable = function() {
 			var newGameFontWidth = 7;
@@ -318,14 +321,26 @@
 		}
 		
 		this.insertSnake = function(speedLevel) {
-			speedLevel = speedLevel || 1;
-			var sX = Math.ceil(this.cellCountX/2)-1,
-			    sY = Math.ceil(this.cellCountY/2);
-			var cells = [ 
-				this.grid[sX][sY-2], 
-				this.grid[sX][sY-1],
-				this.grid[sX][sY-0]
-			];
+			this.initPolyominos();
+			this.newStone();
+			speedLevel = 100;
+			var x = Math.rand(0,(11-this.currentStone.matrix[0].length));
+			// var cells = [
+			// 	this.grid[0][0],
+			// 	this.grid[0][1], 
+			// 	this.grid[1][1],
+			// 	this.grid[1][2]
+			// ];
+			var cells = []
+			var count = 0
+			for (var i=0; i < this.currentStone.matrix.length; i++) {
+				for (var j=0; j < this.currentStone.matrix[0].length; j++) {
+					if(this.currentStone.matrix[i][j] == 1){
+						cells[count] = this.grid[0+i][x+j];
+						count++;
+					}
+				};
+			};
 			
 			if (this.snake != null)
 				this.snake.remove();
@@ -334,12 +349,11 @@
 			
 			this.snake = new Snake( cells );
 			
-			this.snake.interval = window.setInterval(function() { self.moveSnake(); }, this.snake.speed/speedLevel);
+			this.snake.interval = window.setInterval(function() { self.moveSnake(); }, 5000);//this.snake.speed/speedLevel);
 		}
 		var self = this;
 		this.table = this.initTable();
 		this.insertSnake();
-		this.setCrumb();
 		if ((parEl = document.getElementById("snake")) != null && parEl.appendChild(document.createTextNode("")))
 			parEl.replaceChild(this.table, parEl.firstChild);
 		else
