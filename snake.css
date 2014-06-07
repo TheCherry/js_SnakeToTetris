@@ -1,34 +1,34 @@
 			/* SNAKE */
-			#snake table { 
+			#tetris table { 
 				border-collapse:collapse;
 				margin: 2% auto;
 			}
 
-			#snake tbody td { 
+			#tetris tbody td { 
 				border:1px solid black; 
 				width: 25px;
 				height: 25px;
 			}
 
-			#snake thead th { 
+			#tetris thead th { 
 				border:1px solid black; 
 				text-align:center;
 			}
 
-			#snake td.right {
+			#tetris td.right {
 				text-align:right;
 			}
 
-			#snake td.left {
+			#tetris td.left {
 				text-align:left;
 			}
 
 
-			#snake tfoot td { 
+			#tetris tfoot td { 
 				font-size:x-small;
 			}
 
-			#snake tfoot td span{ 
+			#tetris tfoot td span{ 
 				color: darkblue;
 				font-weight: bold;
 			}			

@@ -1,5 +1,5 @@
-function Block () {
-	if(this.polyominos !== null){
+function Block (elements) {
+	if(this.polyominos == null){
 		// https://de.wikipedia.org/wiki/Tetris#Spielprinzip
 		// https://de.wikipedia.org/wiki/Polyomino
 		this.polyominos = new Array(7);
@@ -14,6 +14,7 @@ function Block () {
 				[1,0,0],
 				[1,1,1]
 			],
+		color: "#1B0AC3"
 		};
 		this.polyominos[2] = {
 			matrix: [
@@ -51,17 +52,110 @@ function Block () {
 		color: "#F20006"
 		};
 	}
-	tmp = Main.polyominos[Math.rand(0, 6)];
-	this.matrix = tmp.matrix;
-	this.color = tmp.color;
-
+	ret = this.polyominos[Math.rand(0, 6)];
+	this.matrix = ret.matrix;
+	this.color = ret.color;
 
 	this.elements = elements;
 	this.interval = null;
-	this.speed = 300;
 	this.horizontalDirection = 0;
 	this.verticalDirection   =  1;
 	this.isKeyPressed = false;
+
+	this.getElement = function(i) {
+		return this.elements[i];
+	}
+
+	this.setElement = function(newElements){
+		this.elements = newElements;
+	};
+
+	this.moveTo = function(newPos, isFoot){
+		isFoot = isFoot || false;
+
+		var canMove = !this.contains(newPos)?true:this.elements[this.length()-1].x==newPos.x&&this.elements[this.length()-1].y==newPos.y?true:false;
+		
+		canMove = canMove || this.horizontalDirection != 0 && this.verticalDirection != 0;
+		if (!this.isAlive || !canMove) {
+			this.dispatch();
+			return;
+		}			
+		
+		var newElements = [];
+		newElements.push(newPos);
+
+		for (var i=0; i<this.length(); i++) {
+			this.elements[i].style.backgroundColor = this.colorAlive;
+			if (i<this.length()-1)
+				newElements.push( this.elements[i] );
+			else if (i==this.length()-1 && isFoot)
+				newElements.push( this.elements[this.length()-1] );
+			else
+				this.elements[this.length()-1].style.backgroundColor = this.elements[this.length()-1].defaultColor;
+		}
+		newPos.style.backgroundColor = this.colorHead;
+		this.elements = newElements;
+		this.isKeyPressed = false;
+	};
+	var self = this;
+	document.onkeydown = function(e){
+		if (self.isKeyPressed)
+			return;
+		var kc = window.getKeyCode(e);
+		// links
+		if ((kc == 37 || kc == 65) && self.horizontalDirection === 0) {
+			self.horizontalDirection = -1;
+			self.verticalDirection = 0;
+		}
+		// hoch
+		else if ((kc == 38 || kc == 87)) {
+			this.rotate();
+		}
+		//rechts
+		else if ((kc == 39 || kc == 68) && self.horizontalDirection === 0) {
+			self.horizontalDirection = 1;
+			self.verticalDirection = 0;
+		}
+		//runter
+		else if ((kc == 40 || kc == 83) && self.verticalDirection === 0) {
+			self.verticalDirection = 1;
+			self.horizontalDirection = 0;
+		}
+		self.isKeyPressed = true;
+	};
+
+	this.drawBlock = function() {
+		for (var i=0; i<this.length(); i++)
+				this.elements[i].style.backgroundColor = this.color;
+	};
+
+	this.contains = function( element ) {
+		for (var i=0; i<this.length(); i++) 
+			if (this.elements[i].x == element.x && this.elements[i].y == element.y)
+				return true;
+		return false;
+	};
+
+	this.dispatch = function() {
+		this.isAlive = false;
+		if (this.interval !== null)
+			window.clearInterval(this.interval);
+		for (var i=0; i<this.length(); i++)
+			this.elements[i].style.backgroundColor = this.colorDeath;
+	};
+	
+	this.remove = function() {
+		this.isAlive = false;
+		if (this.interval !== null)
+			window.clearInterval(this.interval);
+		for (var i=0; i<this.length(); i++)
+			this.elements[i].style.backgroundColor = this.elements[i].defaultColor;
+	};
+
+	this.length = function() {
+			return this.elements.length;
+	};
+		
 
 
 	this.position = function(){
@@ -83,5 +177,6 @@ function Block () {
 		}
 		this.matrix = newMatrix;
 	};
+	this.drawBlock();
 }
 

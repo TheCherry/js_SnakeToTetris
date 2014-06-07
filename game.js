@@ -2,6 +2,12 @@ Math.rand = function(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+this.matrixRun = function (func){
+	for (var i=0; i<this.matrix[0].length(); i++)
+		for (var ii=0; ii<this.matrix[i].length(); ii++)
+			func(i, ii);
+};
+
 function getKeyCode(ev) {
 	if (!ev) ev = window.event;
 	if ((typeof(ev.which) == "undefined" || (typeof(ev.which) == "number" && ev.which === 0)) && typeof(ev.keyCode) == "number")
@@ -9,6 +15,7 @@ function getKeyCode(ev) {
 	else	
 		return ev.which;
 }
+
 
 var DOMContentLoaded = false;
 function addContentLoadListener (func) {
