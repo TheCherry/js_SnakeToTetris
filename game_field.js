@@ -77,7 +77,7 @@ function GameField(y, x) {
 		var kc = window.getKeyCode(e);
 		// links
 		if ((kc == 37 || kc == 65)) {
-
+			self.currentBlock.x--;
 		}
 		// hoch
 		else if ((kc == 38 || kc == 87)) {
@@ -85,15 +85,16 @@ function GameField(y, x) {
 		}
 		//rechts
 		else if ((kc == 39 || kc == 68)) {
-
+			self.currentBlock.x++;
 		}
 		//runter
 		else if ((kc == 40 || kc == 83)) {
+			self.currentBlock.y++;
 		}
 		self.isKeyPressed = true;
 	};
 
-	this.moveBlock = function() {
+	this.blockLoop = function() {
 		var x = this.currentBlock.x;
 		var y = this.currentBlock.y+1;
 		if(y+this.currentBlock.matrix.length < this.cellCountX+1){
@@ -113,13 +114,14 @@ function GameField(y, x) {
 	this.insertBlock = function() {
 		if(this.currentBlock != null){
 			clearInterval(this.currentBlock.interval);
+			doneBlocks[doneBlocks.length] = this.currentBlock;
 		}
 		this.currentBlock = new Block(this.grid);
 		this.currentBlock.x = Math.rand(0,(11-this.currentBlock.matrix[0].length));
 		this.currentBlock.rotate();
 		this.currentBlock.drawBlock();
 
-		this.currentBlock.interval = window.setInterval(function() { self.moveBlock(); }, 200);
+		this.currentBlock.interval = window.setInterval(function() { self.blockLoop(0,1); }, 200);
 	};
 	var self = this;
 	this.isKeyPressed = false;
