@@ -1,4 +1,4 @@
-function Block (elements) {
+function Block (grid) {
 	if(this.polyominos == null){
 		// https://de.wikipedia.org/wiki/Tetris#Spielprinzip
 		// https://de.wikipedia.org/wiki/Polyomino
@@ -56,7 +56,11 @@ function Block (elements) {
 	this.matrix = ret.matrix;
 	this.color = ret.color;
 
-	this.elements = elements;
+	this.x = 0;
+	this.y = 0;
+
+	this.grid = grid;
+	this.elements = [];
 	this.interval = null;
 	this.horizontalDirection = 0;
 	this.verticalDirection   =  1;
@@ -70,8 +74,7 @@ function Block (elements) {
 		this.elements = newElements;
 	};
 
-	this.moveTo = function(newPos, isFoot){
-		isFoot = isFoot || false;
+	this.moveTo = function(newPos){
 
 		var canMove = !this.contains(newPos)?true:this.elements[this.length()-1].x==newPos.x&&this.elements[this.length()-1].y==newPos.y?true:false;
 		
@@ -125,6 +128,16 @@ function Block (elements) {
 	};
 
 	this.drawBlock = function() {
+		this.elements = [];	
+		var count = 0;
+		for (var i=0; i < this.matrix.length; i++) {
+			for (var j=0; j < this.matrix[0].length; j++) {
+				if(this.matrix[i][j] == 1){
+					this.elements[count] = this.grid[this.y+i][this.x+j];
+					count++;
+				}
+			}
+		}
 		for (var i=0; i<this.length(); i++)
 				this.elements[i].style.backgroundColor = this.color;
 	};
@@ -145,9 +158,6 @@ function Block (elements) {
 	};
 	
 	this.remove = function() {
-		this.isAlive = false;
-		if (this.interval !== null)
-			window.clearInterval(this.interval);
 		for (var i=0; i<this.length(); i++)
 			this.elements[i].style.backgroundColor = this.elements[i].defaultColor;
 	};
@@ -159,8 +169,7 @@ function Block (elements) {
 
 
 	this.position = function(){
-		this.x = 0;
-		this.y = 0;
+		
 	};
 
 	this.rotate = function(){
@@ -177,6 +186,5 @@ function Block (elements) {
 		}
 		this.matrix = newMatrix;
 	};
-	this.drawBlock();
 }
 

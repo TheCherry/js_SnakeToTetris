@@ -71,36 +71,33 @@ function GameField(y, x) {
 	return table;
 	};
 
-	this.moveBlock = function() {
-		var y  = this.currentBlock.horizontalDirection;
-		var x  = this.currentBlock.verticalDirection;
-		var el = this.currentBlock.getElement(0);
 
-		x = el.x+x;
-		y = el.y+y;
-			
-		x = x<0?this.cellCountX-1:x>=this.cellCountX?0:x;
-		y = y<0?this.cellCountY-1:y>=this.cellCountY?0:y;	
-		
-		var cell = this.grid[x][y];
-		this.currentBlock.moveTo( cell );
-	};
-
-
-	this.insertBlock = function() {		
-		var cells = [ ]; 
-		this.currentBlock = new Block(cells);
-		var x = Math.rand(0,(11-this.currentBlock.matrix[0].length));
-
+	this.placeMatix = function (x, y){
+		var cells = []; 
 		var count = 0;
 		for (var i=0; i < this.currentBlock.matrix.length; i++) {
 			for (var j=0; j < this.currentBlock.matrix[0].length; j++) {
 				if(this.currentBlock.matrix[i][j] == 1){
-					cells[count] = this.grid[0+i][x+j];
+					cells[count] = this.grid[y+i][x+j];
 					count++;
 				}
 			}
 		}
+		this.currentBlock.setElement(cells);
+	};
+
+	this.moveBlock = function() {
+		this.currentBlock.remove();
+		this.currentBlock.y++;
+		this.currentBlock.drawBlock();
+	};
+
+
+	this.insertBlock = function() {		
+		this.currentBlock = new Block(this.grid);
+		this.currentBlock.x = Math.rand(0,(11-this.currentBlock.matrix[0].length));
+
+		
 		
 		//this.currentBlock.setElement(cells);
 		this.currentBlock.drawBlock();
@@ -108,7 +105,7 @@ function GameField(y, x) {
 		// this.currentBlock = new currentBlock( cells );
 		
 		//this.currentBlock.interval = window.setInterval(function() { self.moveSnake(); }, 5000);//this.snake.speed/speedLevel);
-		this.currentBlock.interval = window.setInterval(function() { self.moveBlock(); }, 5000);
+		this.currentBlock.interval = window.setInterval(function() { self.moveBlock(); }, 200);
 	};
 	var self = this;
 
