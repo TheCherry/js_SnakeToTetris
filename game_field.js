@@ -71,44 +71,58 @@ function GameField(y, x) {
 	return table;
 	};
 
+	document.onkeydown = function(e){
+		if (self.isKeyPressed)
+			return;
+		var kc = window.getKeyCode(e);
+		// links
+		if ((kc == 37 || kc == 65)) {
 
-	this.placeMatix = function (x, y){
-		var cells = []; 
-		var count = 0;
-		for (var i=0; i < this.currentBlock.matrix.length; i++) {
-			for (var j=0; j < this.currentBlock.matrix[0].length; j++) {
-				if(this.currentBlock.matrix[i][j] == 1){
-					cells[count] = this.grid[y+i][x+j];
-					count++;
-				}
-			}
 		}
-		this.currentBlock.setElement(cells);
+		// hoch
+		else if ((kc == 38 || kc == 87)) {
+			self.currentBlock.rotate();
+		}
+		//rechts
+		else if ((kc == 39 || kc == 68)) {
+
+		}
+		//runter
+		else if ((kc == 40 || kc == 83)) {
+		}
+		self.isKeyPressed = true;
 	};
 
 	this.moveBlock = function() {
-		this.currentBlock.remove();
-		this.currentBlock.y++;
-		this.currentBlock.drawBlock();
+		var x = this.currentBlock.x;
+		var y = this.currentBlock.y+1;
+		if(y+this.currentBlock.matrix.length < this.cellCountX+1){
+			this.currentBlock.remove();
+
+			this.currentBlock.x = x;
+			this.currentBlock.y = y;
+
+			this.currentBlock.drawBlock();
+		} else {
+			this.insertBlock();
+		}
+		self.isKeyPressed = false;
 	};
 
 
-	this.insertBlock = function() {		
+	this.insertBlock = function() {
+		if(this.currentBlock != null){
+			clearInterval(this.currentBlock.interval);
+		}
 		this.currentBlock = new Block(this.grid);
 		this.currentBlock.x = Math.rand(0,(11-this.currentBlock.matrix[0].length));
-
-		
-		
-		//this.currentBlock.setElement(cells);
+		this.currentBlock.rotate();
 		this.currentBlock.drawBlock();
 
-		// this.currentBlock = new currentBlock( cells );
-		
-		//this.currentBlock.interval = window.setInterval(function() { self.moveSnake(); }, 5000);//this.snake.speed/speedLevel);
 		this.currentBlock.interval = window.setInterval(function() { self.moveBlock(); }, 200);
 	};
 	var self = this;
-
+	this.isKeyPressed = false;
 	this.table = this.initTable();
 	this.insertBlock();
 	if ((parEl = document.getElementById("tetris")) != null && parEl.appendChild(document.createTextNode("")))

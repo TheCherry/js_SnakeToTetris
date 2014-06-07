@@ -68,7 +68,7 @@ function Block (grid) {
 
 	this.getElement = function(i) {
 		return this.elements[i];
-	}
+	};
 
 	this.setElement = function(newElements){
 		this.elements = newElements;
@@ -101,31 +101,7 @@ function Block (grid) {
 		this.isKeyPressed = false;
 	};
 	var self = this;
-	document.onkeydown = function(e){
-		if (self.isKeyPressed)
-			return;
-		var kc = window.getKeyCode(e);
-		// links
-		if ((kc == 37 || kc == 65) && self.horizontalDirection === 0) {
-			self.horizontalDirection = -1;
-			self.verticalDirection = 0;
-		}
-		// hoch
-		else if ((kc == 38 || kc == 87)) {
-			this.rotate();
-		}
-		//rechts
-		else if ((kc == 39 || kc == 68) && self.horizontalDirection === 0) {
-			self.horizontalDirection = 1;
-			self.verticalDirection = 0;
-		}
-		//runter
-		else if ((kc == 40 || kc == 83) && self.verticalDirection === 0) {
-			self.verticalDirection = 1;
-			self.horizontalDirection = 0;
-		}
-		self.isKeyPressed = true;
-	};
+	
 
 	this.drawBlock = function() {
 		this.elements = [];	
