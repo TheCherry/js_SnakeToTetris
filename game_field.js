@@ -71,13 +71,19 @@ function GameField(y, x) {
 	return table;
 	};
 
+
+	this.nextX = 0;
+	this.nextY = 0;
+
+
+
 	document.onkeydown = function(e){
 		if (self.isKeyPressed)
 			return;
 		var kc = window.getKeyCode(e);
 		// links
 		if ((kc == 37 || kc == 65)) {
-			self.currentBlock.x--;
+			this.nextX = -1;
 		}
 		// hoch
 		else if ((kc == 38 || kc == 87)) {
@@ -94,9 +100,37 @@ function GameField(y, x) {
 		self.isKeyPressed = true;
 	};
 
-	this.blockLoop = function() {
+	this.colision = function() {
+	var block = this.currentBlock;
+	var blockD = null;
+		for (var d = 0; d < doneBlocks.length; d++) {
+			blockD = doneBlocks[d];
+
+			if(blockD.x == block.x && blockD.y == block.y)
+				return true;
+
+			matrixRun(block.matrix, function(m1, i1, ii1) { 
+				return (m1 == matrixRun(blockD.matrix, function(m2, i2, ii2){
+					if (m1 == 1 && m2 == 1  &&
+							(block.x + i1) == (blockD.x + i2) &&
+					  		(block.y + ii1) == (blockD.y + ii2) 
+					  	)
+					{
+						return true;
+					}
+			}))});
+		}
+		return false;
+	};
+
+	this.gameLoop = function() {
 		var x = this.currentBlock.x;
-		var y = this.currentBlock.y+1;
+		var y = this.currentBlock.y;
+
+		this.lY = y;
+		this.lX = x;
+
+
 		if(y+this.currentBlock.matrix.length < this.cellCountX+1){
 			this.currentBlock.remove();
 
@@ -121,7 +155,7 @@ function GameField(y, x) {
 		this.currentBlock.rotate();
 		this.currentBlock.drawBlock();
 
-		this.currentBlock.interval = window.setInterval(function() { self.blockLoop(0,1); }, 200);
+		this.currentBlock.interval = window.setInterval(function() { self.gameLoop(0,1); }, 200);
 	};
 	var self = this;
 	this.isKeyPressed = false;
