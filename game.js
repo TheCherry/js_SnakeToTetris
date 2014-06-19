@@ -3,8 +3,8 @@ Math.rand = function(min, max) {
 };
 
 function matrixRun (matrix, func){
-	for (var i=0; i<matrix[0].length(); i++)
-		for (var ii=0; ii<matrix[i].length(); ii++)
+	for (var i=0; i<matrix[0].length; i++)
+		for (var ii=0; ii<matrix[i].length; ii++)
 			return func(matrix[i][ii], i, ii);
 }
 

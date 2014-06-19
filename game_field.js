@@ -83,7 +83,8 @@ function GameField(y, x) {
 		var kc = window.getKeyCode(e);
 		// links
 		if ((kc == 37 || kc == 65)) {
-			this.nextX = -1;
+			self.lastX = x;
+			self.currentBlock.x--;
 		}
 		// hoch
 		else if ((kc == 38 || kc == 87)) {
@@ -91,6 +92,7 @@ function GameField(y, x) {
 		}
 		//rechts
 		else if ((kc == 39 || kc == 68)) {
+			self.lastX = x;
 			self.currentBlock.x++;
 		}
 		//runter
@@ -100,25 +102,19 @@ function GameField(y, x) {
 		self.isKeyPressed = true;
 	};
 
-	this.colision = function() {
-	var block = this.currentBlock;
-	var blockD = null;
-		for (var d = 0; d < doneBlocks.length; d++) {
-			blockD = doneBlocks[d];
-
-			if(blockD.x == block.x && blockD.y == block.y)
-				return true;
-
-			matrixRun(block.matrix, function(m1, i1, ii1) { 
-				return (m1 == matrixRun(blockD.matrix, function(m2, i2, ii2){
-					if (m1 == 1 && m2 == 1  &&
-							(block.x + i1) == (blockD.x + i2) &&
-					  		(block.y + ii1) == (blockD.y + ii2) 
-					  	)
-					{
-						return true;
-					}
-			}))});
+	this.colision = function(blockX, blockY) {
+		var block = this.currentBlock;
+		var blockD = null;
+		for (var d = 0; d < this.doneBlocks.length; d++) {
+			blockD = this.doneBlocks[d];
+			for (var i1=0; i1<block.matrix.length; i1++)
+				for (var ii1=0; ii1<block.matrix[i1].length; ii1++)
+					for (var i2=0; i2<blockD.matrix.length; i2++)
+						for (var ii2=0; ii2<blockD.matrix[i2].length; ii2++)
+							if 	(block.matrix[i1][ii1] == 1 && blockD.matrix[i2][ii2] == 1  &&
+								(blockY + i1)  == (blockD.y + i2) &&
+								(blockX + ii1) == (blockD.x + ii2))
+									return true;
 		}
 		return false;
 	};
@@ -127,11 +123,10 @@ function GameField(y, x) {
 		var x = this.currentBlock.x;
 		var y = this.currentBlock.y;
 
-		this.lY = y;
-		this.lX = x;
-
-
-		if(y+this.currentBlock.matrix.length < this.cellCountX+1){
+		if(this.currentBlock.x < 0 ||  this.currentBlock.x + this.currentBlock.matrix[0].length > this.cellCountX)
+			x = this.lastX;
+		y++;
+		if(y+this.currentBlock.matrix.length < this.cellCountX+1 && !this.colision(x, y)){
 			this.currentBlock.remove();
 
 			this.currentBlock.x = x;
@@ -148,7 +143,7 @@ function GameField(y, x) {
 	this.insertBlock = function() {
 		if(this.currentBlock != null){
 			clearInterval(this.currentBlock.interval);
-			doneBlocks[doneBlocks.length] = this.currentBlock;
+			this.doneBlocks[this.doneBlocks.length] = this.currentBlock;
 		}
 		this.currentBlock = new Block(this.grid);
 		this.currentBlock.x = Math.rand(0,(11-this.currentBlock.matrix[0].length));
